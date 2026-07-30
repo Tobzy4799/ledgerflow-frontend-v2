@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { parseUnits, formatUnits } from "viem";
 import { ADDRESSES, ERC20_ABI, INSURANCE_POOL_ABI } from "@/lib/contracts";
-import { ConnectWallet } from "@/components/ConnectWallet";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PageHeader } from "@/components/PageHeader";
 
 const API_BASE = process.env.NEXT_PUBLIC_AGENT_API_URL || "http://localhost:3001";
@@ -169,7 +169,7 @@ export default function AdminPage() {
         <PageHeader title="Admin" subtitle="Platform management — owner only." />
         <div className="card p-6">
           <p className="mb-4 text-sm text-muted">Connect the owner wallet to access admin controls.</p>
-          <ConnectWallet />
+          <ConnectButton />
         </div>
       </>
     );

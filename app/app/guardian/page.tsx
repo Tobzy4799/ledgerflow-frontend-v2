@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { parseUnits, formatUnits } from "viem";
 import { ADDRESSES, ERC20_ABI, AGENT_AUTH_ABI } from "@/lib/contracts";
-import { ConnectWallet } from "@/components/ConnectWallet";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PageHeader } from "@/components/PageHeader";
 
 const GUARDIAN_WALLET_ADDRESS = "0xf7c2e43078ded0045b05289e86421ac2dab90a35" as const;
@@ -105,7 +105,7 @@ export default function GuardianPage() {
         <PageHeader title="Guardian" subtitle="Autonomous protection for your position." />
         <Field>
           <p className="mb-4 text-sm text-muted">Connect a wallet to set up Guardian.</p>
-          <ConnectWallet />
+          <ConnectButton />
         </Field>
       </>
     );

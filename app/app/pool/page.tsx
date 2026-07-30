@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { parseUnits, formatUnits } from "viem";
 import { ADDRESSES, ERC20_ABI, VAULT_ABI, POOL_ABI } from "@/lib/contracts";
-import { ConnectWallet } from "@/components/ConnectWallet";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PageHeader } from "@/components/PageHeader";
 
 function Field({ children }: { children: React.ReactNode }) {
@@ -158,7 +158,7 @@ export default function PoolPage() {
         <PageHeader title="Liquidity Pool" subtitle="Provide liquidity, earn a bonus on the scarcer side." />
         <Field>
           <p className="mb-4 text-sm text-muted">Connect a wallet to provide liquidity.</p>
-          <ConnectWallet />
+          <ConnectButton />
         </Field>
       </>
     );

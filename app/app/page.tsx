@@ -6,7 +6,7 @@ import { useAccount, useReadContract } from "wagmi";
 import { formatUnits } from "viem";
 import { AlertTriangle, ShieldCheck, Clock } from "lucide-react";
 import { ADDRESSES, VAULT_ABI, AGENT_AUTH_ABI, POOL_ABI } from "@/lib/contracts";
-import { ConnectWallet } from "@/components/ConnectWallet";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PageHeader } from "@/components/PageHeader";
 
 const API_BASE = process.env.NEXT_PUBLIC_AGENT_API_URL || "http://localhost:3001";
@@ -137,7 +137,7 @@ export default function DashboardPage() {
         <PageHeader title="Dashboard" subtitle="Your position at a glance." />
         <div className="card p-6">
           <p className="mb-4 text-sm text-muted">Connect a wallet to see your position.</p>
-          <ConnectWallet />
+          <ConnectButton />
         </div>
       </>
     );

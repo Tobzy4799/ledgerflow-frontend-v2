@@ -6,7 +6,7 @@ import { waitForTransactionReceipt, readContract } from "wagmi/actions";
 import { parseUnits, parseAbiItem, decodeEventLog, formatUnits } from "viem";
 import { ADDRESSES, ERC20_ABI, VAULT_ABI, POOL_ABI, AGENT_AUTH_ABI } from "@/lib/contracts";
 import { wagmiConfig } from "@/lib/wagmi";
-import { ConnectWallet } from "@/components/ConnectWallet";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PageHeader } from "@/components/PageHeader";
 
 const EXECUTOR_WALLET_ADDRESS = "0x4b9a4af1d4e08350a112fc5948076a4de7b9df27" as const;
@@ -337,7 +337,7 @@ export default function ExecutorPage() {
         <PageHeader title="Executor" subtitle="Describe what you want to do, in plain English." />
         <div className="card p-6">
           <p className="mb-4 text-sm text-muted">Connect a wallet to use the Executor.</p>
-          <ConnectWallet />
+          <ConnectButton />
         </div>
       </>
     );

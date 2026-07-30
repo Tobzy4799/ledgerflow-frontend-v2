@@ -5,7 +5,7 @@ import { useAccount, useReadContract, useWriteContract, useWaitForTransactionRec
 import { parseUnits, formatUnits } from "viem";
 import { ArrowDown, ChevronDown } from "lucide-react";
 import { ADDRESSES, ERC20_ABI, POOL_ABI, VAULT_ABI } from "@/lib/contracts";
-import { ConnectWallet } from "@/components/ConnectWallet";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PageHeader } from "@/components/PageHeader";
 
 type Token = "USDC" | "EURC" | "cirBTC";
@@ -168,7 +168,7 @@ export default function SwapPage() {
         <PageHeader title="Swap" subtitle="Trade EURC or cirBTC against USDC." />
         <div className="card p-6">
           <p className="mb-4 text-sm text-muted">Connect a wallet to swap.</p>
-          <ConnectWallet />
+          <ConnectButton />
         </div>
       </>
     );

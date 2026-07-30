@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { parseUnits } from "viem";
 import { ADDRESSES, ERC20_ABI, AGENT_AUTH_ABI } from "@/lib/contracts";
-import { ConnectWallet } from "@/components/ConnectWallet";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PageHeader } from "@/components/PageHeader";
 
 const CONDITIONAL_AGENT_WALLET = "0x963c37428bbb5091e8511b82b894d028537333d5" as const;
@@ -206,7 +206,7 @@ export default function ConditionalAgentsPage() {
         <PageHeader title="Conditional Agents" subtitle="Price-triggered swaps and recurring DCA rules." />
         <div className="card p-6">
           <p className="mb-4 text-sm text-muted">Connect a wallet to set up a rule.</p>
-          <ConnectWallet />
+          <ConnectButton />
         </div>
       </>
     );

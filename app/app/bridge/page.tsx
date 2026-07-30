@@ -6,7 +6,7 @@ import { waitForTransactionReceipt } from "wagmi/actions";
 import { createPublicClient, http, parseUnits, formatUnits, pad, defineChain } from "viem";
 import { ADDRESSES, ERC20_ABI } from "@/lib/contracts";
 import { wagmiConfig } from "@/lib/wagmi";
-import { ConnectWallet } from "@/components/ConnectWallet";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PageHeader } from "@/components/PageHeader";
 
 const TOKEN_MESSENGER_V2 = "0x8FE6B999Dc680CcFDD5Bf7EB0974218be2542DAA" as const;
@@ -253,7 +253,7 @@ export default function BridgePage() {
         <PageHeader title="Bridge" subtitle="Move USDC between Arc and 7 other chains." />
         <div className="card p-6">
           <p className="mb-4 text-sm text-muted">Connect a wallet to bridge USDC.</p>
-          <ConnectWallet />
+          <ConnectButton />
         </div>
       </>
     );

@@ -6,7 +6,7 @@ import { readContract } from "wagmi/actions";
 import { parseUnits, formatUnits } from "viem";
 import { ADDRESSES, ERC20_ABI, VAULT_ABI } from "@/lib/contracts";
 import { wagmiConfig } from "@/lib/wagmi";
-import { ConnectWallet } from "@/components/ConnectWallet";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PageHeader } from "@/components/PageHeader";
 
 function Field({ children }: { children: React.ReactNode }) {
@@ -242,7 +242,7 @@ export default function BorrowPage() {
         <PageHeader title="Borrow" subtitle="Deposit collateral, then borrow USDC against it." />
         <Field>
           <p className="mb-4 text-sm text-muted">Connect a wallet to borrow.</p>
-          <ConnectWallet />
+          <ConnectButton />
         </Field>
       </>
     );

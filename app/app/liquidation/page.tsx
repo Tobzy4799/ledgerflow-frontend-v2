@@ -6,7 +6,7 @@ import { readContract } from "wagmi/actions";
 import { parseUnits, formatUnits, isAddress } from "viem";
 import { ADDRESSES, ERC20_ABI, VAULT_ABI } from "@/lib/contracts";
 import { wagmiConfig } from "@/lib/wagmi";
-import { ConnectWallet } from "@/components/ConnectWallet";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PageHeader } from "@/components/PageHeader";
 
 const API_BASE = process.env.NEXT_PUBLIC_AGENT_API_URL || "http://localhost:3001";
@@ -106,7 +106,7 @@ export default function LiquidationPage() {
         <PageHeader title="Liquidation" subtitle="Repay someone else's at-risk debt, receive their collateral at a bonus." />
         <div className="card p-6">
           <p className="mb-4 text-sm text-muted">Connect a wallet to liquidate a position.</p>
-          <ConnectWallet />
+          <ConnectButton />
         </div>
       </>
     );
