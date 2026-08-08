@@ -110,7 +110,7 @@ export default function DashboardPage() {
     chainId: 5042002,
   });
 
- const guardianActive = guardianAuth ? (guardianAuth as [boolean, bigint, bigint, bigint, bigint])[0] : false;
+  const guardianActive = guardianAuth ? (guardianAuth as [boolean])[0] : false;
   const utilization = utilizationBps !== undefined ? Number(utilizationBps) / 100 : undefined;
 
   const rate = exchangeRate !== undefined ? Number(formatUnits(exchangeRate as bigint, 6)) : 1;
@@ -122,6 +122,9 @@ export default function DashboardPage() {
   const hasAnyLp = hasEurcLp || hasCirbtcLp;
 
   const [activeRuleCount, setActiveRuleCount] = useState<number | null>(null);
+  const [email, setEmail] = useState("");
+  const [savedEmail, setSavedEmail] = useState<string | null>(null);
+  const [savingEmail, setSavingEmail] = useState(false);
 
   useEffect(() => {
     if (!address) return;
@@ -129,7 +132,28 @@ export default function DashboardPage() {
       .then((res) => res.json())
       .then((data) => setActiveRuleCount((data.agents || []).filter((r: any) => r.active).length))
       .catch(() => setActiveRuleCount(null));
+    fetch(`${API_BASE}/platform/email/${address}`)
+      .then((res) => res.json())
+      .then((d) => setSavedEmail(d.email))
+      .catch(() => {});
   }, [address]);
+
+  async function handleSaveEmail() {
+    if (!email || !address) return;
+    setSavingEmail(true);
+    try {
+      await fetch(`${API_BASE}/platform/set-email`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userAddress: address, email }),
+      });
+      setSavedEmail(email);
+      setEmail("");
+    } catch {
+      // non-critical, fail silently
+    }
+    setSavingEmail(false);
+  }
 
   if (!isConnected) {
     return (
@@ -269,6 +293,31 @@ export default function DashboardPage() {
           )}
         </div>
       )}
+
+      <div className="card mt-4 p-5">
+        <p className="text-xs font-medium text-subtle uppercase">Email notifications</p>
+        <p className="mt-1 mb-3 text-sm text-muted">
+          Get an email when Guardian warns you or steps in, and when a Conditional Agent rule fires. Optional, and shared across both.
+        </p>
+        {savedEmail && <p className="mb-2 text-xs text-subtle">Currently set to: {savedEmail}</p>}
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="you@example.com"
+            className="flex-1 rounded-lg border px-3 py-2 text-sm"
+            style={{ borderColor: "var(--border)" }}
+          />
+          <button
+            onClick={handleSaveEmail}
+            disabled={savingEmail}
+            className="rounded-lg border px-4 py-2 text-sm font-semibold disabled:opacity-50"
+            style={{ borderColor: "var(--border-strong)" }}
+          >
+            {savingEmail ? "Saving…" : savedEmail ? "Update" : "Save"}
+          </button>
+        </div>
+      </div>
     </>
   );
 }
