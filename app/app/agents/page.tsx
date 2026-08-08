@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useAccount, useReadContract, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
-import { parseUnits } from "viem";
+import { parseUnits, formatUnits } from "viem";
 import { ADDRESSES, ERC20_ABI, AGENT_AUTH_ABI } from "@/lib/contracts";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { PageHeader } from "@/components/PageHeader";
@@ -64,6 +64,15 @@ export default function ConditionalAgentsPage() {
   const [maxPerAction, setMaxPerAction] = useState("");
   const [dailyLimit, setDailyLimit] = useState("");
   const [poolApprovalAsset, setPoolApprovalAsset] = useState<"eurc" | "cirbtc">("eurc");
+
+  const { data: currentPoolAllowance, refetch: refetchPoolAllowance } = useReadContract({
+    address: poolApprovalAsset === "eurc" ? ADDRESSES.eurc : ADDRESSES.cirbtc,
+    abi: ERC20_ABI,
+    functionName: "allowance",
+    args: address ? [address, ADDRESSES.pool] : undefined,
+    query: { enabled: !!address, refetchInterval: 10000 },
+    chainId: 5042002,
+  });
   const [poolApprovalAmount, setPoolApprovalAmount] = useState("");
   const [instruction, setInstruction] = useState("");
   const [parsing, setParsing] = useState(false);
@@ -93,6 +102,10 @@ export default function ConditionalAgentsPage() {
   useEffect(() => {
     if (authorizeConfirmed || revokeConfirmed) refetchAuth();
   }, [authorizeConfirmed, revokeConfirmed, refetchAuth]);
+
+  useEffect(() => {
+    if (poolApproveConfirmed) refetchPoolAllowance();
+  }, [poolApproveConfirmed, refetchPoolAllowance]);
 
   const auth = agentAuth as [boolean, bigint, bigint, bigint, bigint] | undefined;
   const isAuthorized = auth ? auth[0] : false;
@@ -260,6 +273,15 @@ export default function ConditionalAgentsPage() {
         <p className="mb-3 text-sm text-muted">
           A separate approval from activation above — needed for whichever asset your rules
           actually trade. Each asset (EURC, cirBTC) needs its own approval.
+        </p>
+        <p className="mb-3 text-sm">
+          <span className="text-muted">Currently approved: </span>
+          <span className="font-data">
+            {currentPoolAllowance !== undefined
+              ? formatUnits(currentPoolAllowance as bigint, poolApprovalAsset === "eurc" ? 6 : 8)
+              : "—"}{" "}
+            {poolApprovalAsset === "eurc" ? "EURC" : "cirBTC"}
+          </span>
         </p>
         <div className="mb-2 flex gap-2">
           {(["eurc", "cirbtc"] as const).map((a) => (
