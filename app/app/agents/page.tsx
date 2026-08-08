@@ -218,12 +218,12 @@ export default function ConditionalAgentsPage() {
 
       <div className="card mb-6 p-5" style={{ background: "var(--accent-soft)", borderColor: "transparent" }}>
         <p className="text-sm" style={{ color: "var(--text-primary)" }}>
-          <strong>Two kinds of rules: </strong> price-triggered (e.g. &ldquo;sell 10 EURC when it
+          <strong>Two kinds of rules:</strong> price-triggered (e.g. &ldquo;sell 10 EURC when it
           hits $1.20&rdquo;) fire once, then stop. Recurring DCA (e.g. &ldquo;buy 20 USDC of EURC
           every 7 days&rdquo;) fire repeatedly until you deactivate them.
         </p>
         <p className="mt-2 text-sm text-muted">
-          Uses its own separate wallet, a different authorization from Guardian or Executor. Also
+          Uses its own separate wallet — a different authorization from Guardian or Executor. Also
           needs a separate approval on the swap pool itself, in addition to the usual standing
           approval.
         </p>
@@ -242,32 +242,6 @@ export default function ConditionalAgentsPage() {
           {(authorizeError || authorizeReceiptError) && (
             <p className="mt-2 text-sm" style={{ color: "var(--danger)" }}>{friendlyError((authorizeError || authorizeReceiptError)!.message)}</p>
           )}
-
-          <div className="hairline mt-4 border-t pt-4">
-            <p className="mb-2 text-xs font-medium text-subtle uppercase">Approve the pool (needed for swaps)</p>
-            <div className="mb-2 flex gap-2">
-              {(["eurc", "cirbtc"] as const).map((a) => (
-                <button
-                  key={a}
-                  onClick={() => setPoolApprovalAsset(a)}
-                  className="rounded-md border px-3 py-1 text-xs font-medium"
-                  style={{ borderColor: poolApprovalAsset === a ? "var(--accent)" : "var(--border)", color: poolApprovalAsset === a ? "var(--accent)" : "var(--text-secondary)" }}
-                >
-                  {a === "eurc" ? "EURC" : "cirBTC"}
-                </button>
-              ))}
-            </div>
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <input value={poolApprovalAmount} onChange={(e) => setPoolApprovalAmount(e.target.value)} placeholder="Amount to approve" className="flex-1 rounded-lg border px-3 py-2 text-sm" style={{ borderColor: "var(--border)" }} />
-              <button onClick={handlePoolApprove} disabled={poolApproving} className="rounded-lg border px-4 py-2 text-sm font-semibold disabled:opacity-50" style={{ borderColor: "var(--border-strong)" }}>
-                {poolApproving ? "Approving…" : "Approve"}
-              </button>
-            </div>
-            {poolApproveConfirmed && <p className="mt-2 text-sm" style={{ color: "var(--success)" }}>Pool approval set.</p>}
-            {(poolApproveError || poolApproveReceiptError) && (
-              <p className="mt-2 text-sm" style={{ color: "var(--danger)" }}>{friendlyError((poolApproveError || poolApproveReceiptError)!.message)}</p>
-            )}
-          </div>
         </div>
       ) : (
         <div className="card mb-6 flex items-center justify-between p-4">
@@ -280,6 +254,36 @@ export default function ConditionalAgentsPage() {
           </button>
         </div>
       )}
+
+      <div className="card mb-6 p-5">
+        <p className="mb-2 text-xs font-medium text-subtle uppercase">Approve the pool (needed for swaps)</p>
+        <p className="mb-3 text-sm text-muted">
+          A separate approval from activation above — needed for whichever asset your rules
+          actually trade. Each asset (EURC, cirBTC) needs its own approval.
+        </p>
+        <div className="mb-2 flex gap-2">
+          {(["eurc", "cirbtc"] as const).map((a) => (
+            <button
+              key={a}
+              onClick={() => setPoolApprovalAsset(a)}
+              className="rounded-md border px-3 py-1 text-xs font-medium"
+              style={{ borderColor: poolApprovalAsset === a ? "var(--accent)" : "var(--border)", color: poolApprovalAsset === a ? "var(--accent)" : "var(--text-secondary)" }}
+            >
+              {a === "eurc" ? "EURC" : "cirBTC"}
+            </button>
+          ))}
+        </div>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <input value={poolApprovalAmount} onChange={(e) => setPoolApprovalAmount(e.target.value)} placeholder="Amount to approve" className="flex-1 rounded-lg border px-3 py-2 text-sm" style={{ borderColor: "var(--border)" }} />
+          <button onClick={handlePoolApprove} disabled={poolApproving} className="rounded-lg border px-4 py-2 text-sm font-semibold disabled:opacity-50" style={{ borderColor: "var(--border-strong)" }}>
+            {poolApproving ? "Approving…" : "Approve"}
+          </button>
+        </div>
+        {poolApproveConfirmed && <p className="mt-2 text-sm" style={{ color: "var(--success)" }}>Pool approval set.</p>}
+        {(poolApproveError || poolApproveReceiptError) && (
+          <p className="mt-2 text-sm" style={{ color: "var(--danger)" }}>{friendlyError((poolApproveError || poolApproveReceiptError)!.message)}</p>
+        )}
+      </div>
 
       <div className="card mb-4 p-6">
         <p className="mb-2 text-xs font-medium text-subtle uppercase">Create a rule</p>
