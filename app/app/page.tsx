@@ -110,7 +110,7 @@ export default function DashboardPage() {
     chainId: 5042002,
   });
 
-  const guardianActive = guardianAuth ? (guardianAuth as [boolean])[0] : false;
+  const guardianActive = guardianAuth ? (guardianAuth as [boolean, bigint, bigint, bigint, bigint])[0] : false;
   const utilization = utilizationBps !== undefined ? Number(utilizationBps) / 100 : undefined;
 
   const rate = exchangeRate !== undefined ? Number(formatUnits(exchangeRate as bigint, 6)) : 1;
