@@ -148,48 +148,53 @@ function SidebarContent({ pathname, onNavigate }: { pathname: string; onNavigate
   const isOwner = !!address && !!ownerAddress && address.toLowerCase() === (ownerAddress as string).toLowerCase();
 
   return (
-    <>
-      <Link href="/" className="mb-4 flex items-center gap-2 px-3 font-semibold">
-        <Image src="/ledgerflow-logo.jpeg" alt="Ledgerflow" width={24} height={24} className="rounded-md" />
-        Ledgerflow
-      </Link>
-      <div className="mb-6 px-3">
-        <ConnectButton showBalance={false} chainStatus="icon" accountStatus="address" />
-      </div>
-      <SidebarBalances />
-      <div className="mb-8">
-        <Link
-          href="/app"
-          onClick={onNavigate}
-          className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors"
-          style={{
-            background: pathname === "/app" ? "var(--accent-soft)" : "transparent",
-            color: pathname === "/app" ? "var(--accent)" : "var(--text-secondary)",
-            fontWeight: pathname === "/app" ? 600 : 400,
-          }}
-        >
-          <LayoutDashboard size={16} />
-          Dashboard
+    <div className="flex h-full flex-col">
+      <div className="shrink-0 px-4 pt-6">
+        <Link href="/" className="mb-4 flex items-center gap-2 px-3 font-semibold">
+          <Image src="/ledgerflow-logo.jpeg" alt="Ledgerflow" width={24} height={24} className="rounded-md" />
+          Ledgerflow
         </Link>
+        <div className="mb-6 px-3">
+          <ConnectButton showBalance={false} chainStatus="icon" accountStatus="address" />
+        </div>
+        <SidebarBalances />
       </div>
-      <NavGroup title="Lending" links={coreLinks} pathname={pathname} onNavigate={onNavigate} />
-      <NavGroup title="Agents" links={agentLinks} pathname={pathname} onNavigate={onNavigate} />
-      {isOwner && (
-        <Link
-          href="/app/admin"
-          onClick={onNavigate}
-          className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors"
-          style={{
-            background: pathname === "/app/admin" ? "var(--accent-soft)" : "transparent",
-            color: pathname === "/app/admin" ? "var(--accent)" : "var(--text-secondary)",
-            fontWeight: pathname === "/app/admin" ? 600 : 400,
-          }}
-        >
-          <Settings size={16} />
-          Admin
-        </Link>
-      )}
-    </>
+
+      <div className="flex-1 overflow-y-auto px-4 pb-6">
+        <div className="mb-8">
+          <Link
+            href="/app"
+            onClick={onNavigate}
+            className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors"
+            style={{
+              background: pathname === "/app" ? "var(--accent-soft)" : "transparent",
+              color: pathname === "/app" ? "var(--accent)" : "var(--text-secondary)",
+              fontWeight: pathname === "/app" ? 600 : 400,
+            }}
+          >
+            <LayoutDashboard size={16} />
+            Dashboard
+          </Link>
+        </div>
+        <NavGroup title="Lending" links={coreLinks} pathname={pathname} onNavigate={onNavigate} />
+        <NavGroup title="Agents" links={agentLinks} pathname={pathname} onNavigate={onNavigate} />
+        {isOwner && (
+          <Link
+            href="/app/admin"
+            onClick={onNavigate}
+            className="flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors"
+            style={{
+              background: pathname === "/app/admin" ? "var(--accent-soft)" : "transparent",
+              color: pathname === "/app/admin" ? "var(--accent)" : "var(--text-secondary)",
+              fontWeight: pathname === "/app/admin" ? 600 : 400,
+            }}
+          >
+            <Settings size={16} />
+            Admin
+          </Link>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -213,7 +218,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
       {/* Mobile top bar — hidden on desktop */}
       <div className="hairline flex shrink-0 items-center justify-between border-b px-4 py-3 md:hidden">
         <Link href="/" className="flex items-center gap-2 font-semibold">
-          <Image src="/ledgerflow-logo.jpeg" alt="Ledgerflow" width={27} height={27} className="rounded-md" />
+          <Image src="/ledgerflow-logo.jpeg" alt="Ledgerflow" width={22} height={22} className="rounded-md" />
           Ledgerflow
         </Link>
         <button onClick={() => setDrawerOpen(true)} aria-label="Open menu">
@@ -225,8 +230,8 @@ function AppShell({ children }: { children: React.ReactNode }) {
       {drawerOpen && (
         <div className="fixed inset-0 z-50 md:hidden">
           <div className="absolute inset-0 bg-black/40" onClick={() => setDrawerOpen(false)} />
-          <div className="card absolute top-0 left-0 h-full w-72 overflow-y-auto rounded-none border-r px-4 py-6">
-            <button onClick={() => setDrawerOpen(false)} aria-label="Close menu" className="mb-4 ml-auto block">
+          <div className="card absolute top-0 left-0 h-full w-72 overflow-y-auto rounded-none border-r">
+            <button onClick={() => setDrawerOpen(false)} aria-label="Close menu" className="mt-4 mr-4 mb-2 ml-auto block">
               <X size={20} />
             </button>
             <SidebarContent pathname={pathname} onNavigate={() => setDrawerOpen(false)} />
@@ -235,7 +240,7 @@ function AppShell({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Desktop sidebar — its own independent scroll, never moves with main content */}
-      <aside className="hairline hidden w-64 shrink-0 overflow-y-auto border-r px-4 py-6 md:block">
+      <aside className="hairline hidden w-64 shrink-0 border-r md:block">
         <SidebarContent pathname={pathname} onNavigate={() => {}} />
       </aside>
 

@@ -63,10 +63,24 @@ export default function ConditionalAgentsPage() {
   const { address, isConnected } = useAccount();
   const [maxPerAction, setMaxPerAction] = useState("");
   const [dailyLimit, setDailyLimit] = useState("");
-  const [poolApprovalAsset, setPoolApprovalAsset] = useState<"eurc" | "cirbtc">("eurc");
+  const [poolApprovalAsset, setPoolApprovalAsset] = useState<"eurc" | "cirbtc" | "usdc">("eurc");
+
+  function poolApprovalToken(asset: "eurc" | "cirbtc" | "usdc") {
+    if (asset === "eurc") return ADDRESSES.eurc;
+    if (asset === "cirbtc") return ADDRESSES.cirbtc;
+    return ADDRESSES.usdc;
+  }
+  function poolApprovalDecimals(asset: "eurc" | "cirbtc" | "usdc") {
+    return asset === "cirbtc" ? 8 : 6; // EURC and USDC both use 6
+  }
+  function poolApprovalSymbol(asset: "eurc" | "cirbtc" | "usdc") {
+    if (asset === "eurc") return "EURC";
+    if (asset === "cirbtc") return "cirBTC";
+    return "USDC";
+  }
 
   const { data: currentPoolAllowance, refetch: refetchPoolAllowance } = useReadContract({
-    address: poolApprovalAsset === "eurc" ? ADDRESSES.eurc : ADDRESSES.cirbtc,
+    address: poolApprovalToken(poolApprovalAsset),
     abi: ERC20_ABI,
     functionName: "allowance",
     args: address ? [address, ADDRESSES.pool] : undefined,
@@ -149,8 +163,8 @@ export default function ConditionalAgentsPage() {
 
   function handlePoolApprove() {
     if (!poolApprovalAmount) return;
-    const token = poolApprovalAsset === "eurc" ? ADDRESSES.eurc : ADDRESSES.cirbtc;
-    const decimals = poolApprovalAsset === "eurc" ? 6 : 8;
+    const token = poolApprovalToken(poolApprovalAsset);
+    const decimals = poolApprovalDecimals(poolApprovalAsset);
     writePoolApprove({
       address: token,
       abi: ERC20_ABI,
@@ -272,26 +286,28 @@ export default function ConditionalAgentsPage() {
         <p className="mb-2 text-xs font-medium text-subtle uppercase">Approve the pool (needed for swaps)</p>
         <p className="mb-3 text-sm text-muted">
           A separate approval from activation above — needed for whichever asset your rules
-          actually trade. Each asset (EURC, cirBTC) needs its own approval.
+          actually trade. &ldquo;Sell&rdquo; rules need the asset (EURC/cirBTC) approved;
+          &ldquo;buy&rdquo; rules need USDC approved instead, since that&apos;s the asset the
+          pool actually pulls from you.
         </p>
         <p className="mb-3 text-sm">
           <span className="text-muted">Currently approved: </span>
           <span className="font-data">
             {currentPoolAllowance !== undefined
-              ? formatUnits(currentPoolAllowance as bigint, poolApprovalAsset === "eurc" ? 6 : 8)
+              ? formatUnits(currentPoolAllowance as bigint, poolApprovalDecimals(poolApprovalAsset))
               : "—"}{" "}
-            {poolApprovalAsset === "eurc" ? "EURC" : "cirBTC"}
+            {poolApprovalSymbol(poolApprovalAsset)}
           </span>
         </p>
         <div className="mb-2 flex gap-2">
-          {(["eurc", "cirbtc"] as const).map((a) => (
+          {(["eurc", "cirbtc", "usdc"] as const).map((a) => (
             <button
               key={a}
               onClick={() => setPoolApprovalAsset(a)}
               className="rounded-md border px-3 py-1 text-xs font-medium"
               style={{ borderColor: poolApprovalAsset === a ? "var(--accent)" : "var(--border)", color: poolApprovalAsset === a ? "var(--accent)" : "var(--text-secondary)" }}
             >
-              {a === "eurc" ? "EURC" : "cirBTC"}
+              {poolApprovalSymbol(a)}
             </button>
           ))}
         </div>
