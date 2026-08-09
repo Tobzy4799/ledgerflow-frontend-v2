@@ -155,7 +155,7 @@ export default function ConditionalAgentsPage() {
       address: token,
       abi: ERC20_ABI,
       functionName: "approve",
-      args: [ADDRESSES.pool, parseUnits(poolApprovalAmount, decimals) * 100n],
+      args: [ADDRESSES.pool, parseUnits(poolApprovalAmount, decimals)],
       chainId: 5042002,
     });
   }
